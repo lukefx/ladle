@@ -88,7 +88,7 @@ module Ladle
       @quiet = opts[:quiet]
       @verbose = opts[:verbose]
       @timeout = opts[:timeout] || 15
-      @tmpdir = opts[:tmpdir] || ENV['TMPDIR'] || ENV['TEMPDIR']
+      @tmpdir = opts[:tmpdir] || ENV['TMPDIR'] || ENV['TEMPDIR'] || ENV['TEMP'] || ENV['TMP']
       @java_bin = opts[:java_bin] ||
         (ENV['JAVA_HOME'] ? File.join(ENV['JAVA_HOME'], "bin", "java") : "java")
       @custom_schemas = opts[:custom_schemas] ? [*opts[:custom_schemas]] : []
@@ -264,7 +264,7 @@ module Ladle
         [File.expand_path("../java", __FILE__)] +
         # User-specified classpath
         additional_classpath
-      ).join(':')
+      ).join(OS.windows? ? ";" : ":")
     end
 
     ##
