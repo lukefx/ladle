@@ -2,7 +2,8 @@ require 'bundler'
 Bundler.setup
 
 require 'rspec'
-
+require 'FileUtils'
+require 'tmpdir'
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require 'ladle'
