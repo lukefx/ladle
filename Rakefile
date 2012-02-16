@@ -1,6 +1,7 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
+require 'os'
 require 'rspec/core/rake_task'
 require 'yard'
 require 'yard/rake/yardoc_task'
@@ -22,9 +23,10 @@ desc "Compile the java adapter code"
 task :compile do
   puts "Compiling java support code"
   jars = Dir['lib/ladle/apacheds/*.jar'].collect { |fn| File.expand_path(fn) }
-  javac = ENV['JAVA_HOME'] ? ENV['JAVA_HOME'] + "/bin/javac" : "javac"
+  javac = ENV['JAVA_HOME'] ? File.join(ENV['JAVA_HOME'], 'bin', 'javac') : "javac"
+  classpath_separator = OS.windows? ? ";" : ":"
   one_cmd(
-    javac, '-cp', "'#{jars.join(':')}'",
+    javac, '-cp', "'#{jars.join(classpath_separator)}'",
     ('-verbose' if Rake.application.options.trace),
     'lib/ladle/java/net/detailedbalance/ladle/*.java')
 end
